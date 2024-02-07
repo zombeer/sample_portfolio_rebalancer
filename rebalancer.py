@@ -23,8 +23,14 @@ class Order:
 class Portfolio:
     """Class for Portfolio."""
 
+    # Securities and their prices
+    # Not optimal way to store the state, but it was chosen to simplify the example
     securities: dict[str, Decimal] = field(default_factory=dict)
+
+    # Current and desired state of the portfolio as quantities
     current_state: dict[str, Decimal] = field(default_factory=dict)
+
+    # Desired state of the portfolio as parts
     desired_state: dict[str, Decimal] = field(default_factory=dict)
 
     def security_value(self, symbol: str) -> Decimal:
