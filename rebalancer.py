@@ -64,7 +64,7 @@ class Portfolio:
         return orders
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     # Example usage
 
     # Securities and their prices at the moment
