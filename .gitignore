@@ -1,0 +1,17 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+pip-wheel-metadata/
+*.egg
+.ruff.toml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+.vscode
