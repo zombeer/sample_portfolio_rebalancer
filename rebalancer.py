@@ -33,6 +33,10 @@ class Portfolio:
     # Desired state of the portfolio as parts
     desired_state: dict[str, Decimal] = field(default_factory=dict)
 
+    def total_value(self) -> Decimal:
+        """Calculate the total value of the portfolio."""
+        return sum(self.security_value(symbol) for symbol in self.current_state)
+
     def security_value(self, symbol: str) -> Decimal:
         """Calculate the value of a security in the portfolio."""
         security_price = self.securities[symbol]
@@ -40,7 +44,7 @@ class Portfolio:
 
     def security_percentages(self) -> dict[str, Decimal]:
         """Calculate the percentage of each security in the portfolio."""
-        total_value = sum(self.security_value(symbol) for symbol in self.current_state)
+        total_value = self.total_value()
         return {
             symbol: self.security_value(symbol) / total_value
             for symbol in self.current_state
@@ -54,7 +58,7 @@ class Portfolio:
         normalized_desired_state = {
             symbol: Decimal(value) / total_desired for symbol, value in self.desired_state.items()
         }
-        total_value = sum(self.security_value(symbol) for symbol in self.current_state)
+        total_value = self.total_value()
 
         for symbol, desired_ratio in normalized_desired_state.items():
             current_value = self.security_value(symbol)
