@@ -2,8 +2,6 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 
-securities = {}
-
 
 class Action(Enum):
     """Enum for Order action."""
@@ -25,12 +23,13 @@ class Order:
 class Portfolio:
     """Class for Portfolio."""
 
+    securities: dict[str, Decimal] = field(default_factory=dict)
     current_state: dict[str, Decimal] = field(default_factory=dict)
     desired_state: dict[str, Decimal] = field(default_factory=dict)
 
     def security_value(self, symbol: str) -> Decimal:
         """Calculate the value of a security in the portfolio."""
-        security_price = securities[symbol]
+        security_price = self.securities[symbol]
         return security_price * Decimal(self.current_state.get(symbol, 0))
 
     def security_percentages(self) -> dict[str, Decimal]:
@@ -45,7 +44,7 @@ class Portfolio:
     def rebalance(self) -> list[Order]:
         """Rebalance the portfolio."""
         orders = []
-        total_desired = sum(self.desired_state.values())
+        total_desired = Decimal(sum(self.desired_state.values()))
         normalized_desired_state = {
             symbol: Decimal(value) / total_desired for symbol, value in self.desired_state.items()
         }
@@ -55,7 +54,7 @@ class Portfolio:
             current_value = self.security_value(symbol)
             desired_value = total_value * desired_ratio
 
-            quantity_change = (desired_value - current_value) / securities[symbol]
+            quantity_change = (desired_value - current_value) / self.securities[symbol]
 
             action = Action.BUY if quantity_change > 0 else Action.SELL
 
@@ -66,6 +65,8 @@ class Portfolio:
 
 
 if __name__ == "__main__":
+    # Example usage
+
     # Securities and their prices at the moment
     securities = {"A": Decimal(10), "B": Decimal(10), "C": Decimal(10)}
 
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     # Current allocation as current quantities
     current_allocation = {"A": 10, "B": 10, "C": 10}
 
-    p = Portfolio(current_allocation, desired_allocation)
+    p = Portfolio(securities, current_allocation, desired_allocation)
 
     # Print current allocation
     print("Current allocation:")  # noqa: T201
