@@ -54,8 +54,11 @@ class Portfolio:
         for symbol, desired_ratio in normalized_desired_state.items():
             current_value = self.security_value(symbol)
             desired_value = total_value * desired_ratio
+
             quantity_change = (desired_value - current_value) / securities[symbol]
+
             action = Action.BUY if quantity_change > 0 else Action.SELL
+
             if quantity_change.__round__(12):
                 orders.append(Order(symbol, action, abs(quantity_change)))
 
@@ -63,15 +66,28 @@ class Portfolio:
 
 
 if __name__ == "__main__":
-    securities = {"A": Decimal(10), "B": Decimal(20), "C": Decimal(30)}
+    # Securities and their prices at the moment
+    securities = {"A": Decimal(10), "B": Decimal(10), "C": Decimal(10)}
 
     # Desired allocation as parts
-    desired_allocation = {"A": 1, "B": 1, "C": 1}
+    desired_allocation = {"A": 1, "B": 1, "C": 0}
 
     # Current allocation as current quantities
-    current_allocation = {"A": 10, "B": 10}
+    current_allocation = {"A": 10, "B": 10, "C": 10}
 
     p = Portfolio(current_allocation, desired_allocation)
 
+    # Print current allocation
+    print("Current allocation:")  # noqa: T201
+    for symbol, quantity in p.current_state.items():
+        print(f"Symbol: {symbol}, Quantity: {quantity.__round__(6)}")  # noqa: T201
+
+    # Print desired allocation
+    print("Desired allocation:")  # noqa: T201
+    for symbol, quantity in p.desired_state.items():
+        print(f"Symbol: {symbol}, Quantity: {quantity.__round__(6)}")  # noqa: T201
+
+    # Print rebalance orders
+    print("Rebalance orders:")  # noqa: T201
     for order in p.rebalance():
-        print(f"Symbol: {order.symbol}, Action: {order.action}, Quantity: {order.quantity.__round__(6)}")
+        print(f"Symbol: {order.symbol}, Action: {order.action}, Quantity: {order.quantity.__round__(6)}")  # noqa: T201
