@@ -14,7 +14,7 @@ cd sample_portfolio_rebalancer
 Modify the `securities`, `current_allocation`, and `desired_allocation` dictionaries in the script. 
 Run:
 ```bash
-python portfolio_rebalancer.py
+python rebalancer.py
 ```
 
 ## Testing
